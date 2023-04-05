@@ -23,11 +23,11 @@ export const getLanguages = createAsyncThunk(
 // çeviri yapma
 export const getAnswer = createAsyncThunk(
   'translate/getAnswer',
-  async (prompt) => {
+  async (props) => {
     const encodedParams = new URLSearchParams();
-    encodedParams.append('source_language', 'tr');
-    encodedParams.append('target_language', 'en');
-    encodedParams.append('text', prompt);
+    encodedParams.append('source_language', props.sourceLang.value);
+    encodedParams.append('target_language', props.targetLang.value);
+    encodedParams.append('text', props.prompt);
 
     const options = {
       method: 'POST',
@@ -48,7 +48,7 @@ export const getAnswer = createAsyncThunk(
 );
 
 const initialState = {
-  chat: [],
+  chat: '',
   languages: [],
   isLoading: false,
 };
@@ -71,7 +71,7 @@ export const chatSlice = createSlice({
     [getAnswer.rejected]: (state) => {
       state.isLoading = false;
     },
-    // dilleri belirleme
+    // dilleri belirlemeisLoading
     [getLanguages.fulfilled]: (state, action) => {
       state.languages = action.payload.map((lang) => ({
         value: lang.code,
